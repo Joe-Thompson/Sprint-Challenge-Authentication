@@ -40,11 +40,20 @@ Demonstrate your understanding of this week's concepts by answering the followin
 
 - [ ] What is the purpose of using _sessions_?
 
+    When using sessions it will allow the user to access the entire site
+    without having to send their information with every request for data. 
+
 - [ ] What does bcrypt do to help us store passwords in a secure manner.
 
+    With bcrypt we are able to hash our passwords. 
+    
 - [ ] What does bcrypt do to slow down attackers?
 
+    Bcrypt will hash our passwords for so many rounds slowing down any attacks
+
 - [ ] What are the three parts of the JSON Web Token?
+
+    The three parts of a jwt are the header, the payload, and the signature. 
 
 ## Minimum Viable Product
 
