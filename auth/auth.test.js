@@ -1,21 +1,13 @@
 const supertest = require('supertest');
 const server = require('../api/server');
+const db  = require("../database/dbConfig");
 
-test('login route', async () => {
-  const res = await supertest(server)
-      .post('/api/auth/login')
-      .send({ username: "joe", password: "123"});
-    expect(res.statusCode).toBe(200);
-    expect(res.type).toBe('text/html');
-    expect(res.body.message).toMatch(/dad/i)
+beforeEach(async () => {
+    await db.seed.run()
 });
 
-test('login route wrong password', async () => {
-    const res = await supertest(server)
-        .post('/api/auth/login')
-        .send({ username: 'Bob', password: '555'});
-    expect(res.statusCode).toBe(401);
-    expect(res.body.errorMessage).toMatch(/invalid/i);
+afterAll(async () => {
+    await db.destroy()
 });
 
 test('register route', async () => {
@@ -30,4 +22,24 @@ test('register route, no password', async () => {
         .post('/api/auth/register')
         .send({username: 'smith'});
     expect(res.statusCode).toBe(500)
+});
+
+test('login route, not registered', async () => {
+    const user = {
+        username: 'joe',
+        password: '123'
+    };
+    const res = await supertest(server)
+        .post('/api/auth/login')
+        .send(user);
+    expect(res.statusCode).toBe(401);
+    expect(res.type).toBe('application/json');
+});
+
+test('login route wrong password', async () => {
+    const res = await supertest(server)
+        .post('/api/auth/login')
+        .send({ username: 'Bob', password: '555'});
+    expect(res.statusCode).toBe(401);
+    expect(res.body.errorMessage).toMatch(/invalid/i);
 });
